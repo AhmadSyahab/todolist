@@ -15,4 +15,14 @@ for CreateTask use below link
 
 for UpdateTask use below link
 **PUT** "http://localhost:3000/:userId/task/:taskId"
+
+for RemoveTask use below link
+**DELETE** "http://localhost:3000/:userId/delete/:taskId"
+
+for DoneTask use below link
+**POST** "http://localhost:3000/:userId/done/:taskId"
+
+for unDone use below link
+**POST** "http://localhost:3000/:userId/undone/:taskId"
+
 ```

@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt    = require('jsonwebtoken');
 const Task = require('../models/task');
 const ObjectId = require('mongodb').ObjectId
+require('dotenv').config()
 
 function signUp(req,res){
 	let user = new User({
@@ -25,12 +26,22 @@ function signUp(req,res){
 function signIn(req,res){
 	User.findOne({
 		username : req.body.username
-	},(err,result) => {  
+	},(err,user) => {  
 		if (err){
 			res.status(500).send({err : err.msg});
 		}else
-		bcrypt.compare(req.body.password, result.password, (err,result) => {
-			res.send(result)			
+		bcrypt.compare(req.body.password, user.password, (err,result) => {
+			if(result){
+				jwt.sign({
+					id : ObjectId(user._id),
+					username : user.username,
+					email : user.email
+				}, process.env.SECRET_KEY , (err,token) => {
+					res.send({ user, message : "login success", token : token})
+				})
+			}else{
+				res.send({err, message : "wrong password"})
+			}			
 		})
 	})
 }
@@ -40,7 +51,6 @@ function findAll(req,res) {
 		_id : ObjectId(req.params.userId)
 	}).populate('task').exec()
 	.then(allTask => {
-		console.log(allTask)
 		res.send(allTask);
 	})
 	.catch(err => {
@@ -65,7 +75,6 @@ function create(req,res) {
 				res.status(500).send({err : err.errmsg})
 			}else{
 				user.task.push(task)
-				console.log(user)
 				user.save()
 				res.send(user);
 			}

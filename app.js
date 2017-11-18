@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const MongoClient = require('mongodb').MongoClient
 const morgan = require('morgan')
+const jwt = require('jsonwebtoken');
  
 
 const url = 'mongodb://localhost:27017/library';
