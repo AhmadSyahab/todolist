@@ -1,8 +1,4 @@
-const mongoose = require('mongoose').connect('mongodb://localhost:27017/todolist');
-const User = require('../models/user');
 const jwt = require('jsonwebtoken');
-require('dotenv').config()
-const Task = require('../models/task');
 require('dotenv').config()
 
 function isSignIn(req,res,next) {
