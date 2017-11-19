@@ -48,7 +48,7 @@ function signIn(req,res){
 
 function findAll(req,res) {
 	User.find({
-		_id : ObjectId(req.params.userId)
+		_id : ObjectId(req.headers.id)
 	}).populate('task').exec()
 	.then(allTask => {
 		res.send(allTask);
@@ -60,10 +60,10 @@ function findAll(req,res) {
 
 function create(req,res) {
 	User.findOne({
-		_id : ObjectId(req.params.userId)
+		_id : ObjectId(req.headers.id)
 	}).then(user => {
 		let task = new Task({
-			userId : req.params.userId,
+			userId : req.headers.id,
 			taskname : req.body.taskname,
 			tags : req.body.tags,
 			status : false,

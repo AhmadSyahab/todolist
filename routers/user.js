@@ -5,14 +5,16 @@ const Middleware = require('../middleware/checklogin')
 
 router.post('/signup', ControllerUser.signUp ); // SignUp
 router.post('/signIn', ControllerUser.signIn ); // SignIn
-router.get('/:userId', Middleware.isSignIn , ControllerUser.findAll); // get user id list
-router.post('/:userId', Middleware.isSignIn, ControllerUser.create); // create task
 
+router.get('/task', Middleware.isSignIn, ControllerUser.findAll); // get all user profile and task list
+router.post('/task', Middleware.isSignIn, ControllerUser.create); // create task
 
-router.put('/:userId/task/:taskId', Middleware.isSignIn, ControllerTask.update) // update task
-router.delete('/:userId/delete/:taskId',Middleware.isSignIn, ControllerTask.remove) // delete task
-router.post('/:userId/done/:taskId', Middleware.isSignIn, ControllerTask.done) // make status task true (done)
-router.post('/:userId/undone/:taskId', Middleware.isSignIn, ControllerTask.unDone) // make status task false (notdone)
+router.get('/task/:taskId', Middleware.isSignIn, Middleware.checkOwner, ControllerTask.findOne) // get specific task
+router.put('/task/:taskId', Middleware.isSignIn, Middleware.checkOwner,  ControllerTask.update) // update task
+router.delete('/task/:taskId',Middleware.isSignIn, Middleware.checkOwner, ControllerTask.remove) // delete task
+
+router.put('/checklist/:taskId', Middleware.isSignIn, Middleware.checkOwner, ControllerTask.done) // make status task true (done)
+router.put('/unchecklist/:taskId', Middleware.isSignIn, Middleware.checkOwner,  ControllerTask.unDone) // make status task false (notdone)
 
 
 module.exports = router;

@@ -4,10 +4,22 @@ const Task = require('../models/task');
 const ObjectId = require('mongodb').ObjectId
 
 
+function findOne(req,res) {
+	Task.find({
+		_id : ObjectId(req.params.taskId)
+	}).populate('userId').exec()
+	.then(task => {
+		res.send(task);
+	})
+	.catch(err => {
+		res.status(500).send({err: err.errmsg})
+	})
+}
+
 function update(req,res) {
 	Task.findOne({
 		_id : req.params.taskId,
-		userId : req.params.userId
+		userId : req.headers.id
 	}, (err, task) => {
 		if(task){
 			task.set({
@@ -34,7 +46,7 @@ function update(req,res) {
 function remove(req,res) {
 	Task.remove({
 		_id : req.params.taskId,
-		userId : req.params.userId
+		userId : req.headers.id
 	}, (err, task) => {
 		if(err){
 			res.status(500).send(err)
@@ -47,7 +59,7 @@ function remove(req,res) {
 function done(req,res) {
 	Task.findOne({
 		_id : req.params.taskId,
-		userId : req.params.userId
+		userId : req.headers.id
 	}, (err, task) => {
 		if(task){
 			task.set({
@@ -74,7 +86,7 @@ function done(req,res) {
 function unDone(req,res) {
 	Task.findOne({
 		_id : req.params.taskId,
-		userId : req.params.userId
+		userId : req.headers.id
 	}, (err, task) => {
 		if(task){
 			task.set({
@@ -99,6 +111,7 @@ function unDone(req,res) {
 }
 
 module.exports = {
+	findOne,
 	update,
 	remove,
 	done,

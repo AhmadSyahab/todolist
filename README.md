@@ -1,28 +1,17 @@
 # todolist
 
 ```
-for signup use below link
-**POST** "http://localhost:3000/signup"
 
-for signin use below link
-**POST** "http://localhost:3000/signin"
+| Route        | HTTP           | Description  |
+| ------------- |:-------------:| -----:|
+|`/task`  			 	  | GET   | Get all the task list and user profile|
+|`/task/:taskId	`   	  | GET   | Get a specific task|
+|`/task`    	     	  | POST  | Create a task|
+|`/task/:taskId`	  	  | DELETE| Delete a task|
+|`/task/:taskId`	 	  | PUT   | Update a task with new info|
+|`/checklist/:taskId`	  | PUT   | Update task status Done or True|
+|`/unchecklist/:taskId`	  | PUT   | Update task status unDone or False|
 
-for listUser use below link
-**GET** "http://localhost:3000/:userId"
-
-for CreateTask use below link
-**POST** "http://localhost:3000/:userId"
-
-for UpdateTask use below link
-**PUT** "http://localhost:3000/:userId/task/:taskId"
-
-for RemoveTask use below link
-**DELETE** "http://localhost:3000/:userId/delete/:taskId"
-
-for DoneTask use below link
-**POST** "http://localhost:3000/:userId/done/:taskId"
-
-for unDone use below link
-**POST** "http://localhost:3000/:userId/undone/:taskId"
 
 ```
+

@@ -1,9 +1,11 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
+const ObjectId = require('mongodb').ObjectId
+const Task = require('../models/task');
 
 function isSignIn(req,res,next) {
 	jwt.verify(req.headers.token , process.env.SECRET_KEY , function(err, decoded) {
-		if(err || req.params.userId != decoded.id){
+		if(err){
 			res.send({message : "not authorized"})
 		}else{
 			req.headers.id = decoded.id
@@ -16,6 +18,21 @@ function isSignIn(req,res,next) {
 // invalid token - synchronous
 }
 
+function checkOwner(req,res,next) {
+	Task.findOne({
+		_id : ObjectId(req.params.taskId)
+	}).then(result => {
+		console.log(result.userId,req.headers.id)
+		if(result.userId == req.headers.id){
+			next()
+		}else{
+			res.send({message : "you cant access"})
+		}
+	}).catch(err => {
+		res.status(500).send({message : "cant found that task"})
+	})
+}
 module.exports ={
-	isSignIn
+	isSignIn,
+	checkOwner
 }
