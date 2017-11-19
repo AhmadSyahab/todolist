@@ -1,6 +1,5 @@
 # todolist
 
-```
 
 | Route        | HTTP           | Description  |
 | ------------- |:-------------:| -----:|
@@ -11,7 +10,3 @@
 |`/task/:taskId`	 	  | PUT   | Update a task with new info|
 |`/checklist/:taskId`	  | PUT   | Update task status Done or True|
 |`/unchecklist/:taskId`	  | PUT   | Update task status unDone or False|
-
-
-```
-
