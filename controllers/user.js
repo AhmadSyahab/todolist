@@ -5,9 +5,11 @@ const jwt    = require('jsonwebtoken');
 const Task = require('../models/task');
 const ObjectId = require('mongodb').ObjectId
 require('dotenv').config()
+const FB = require('fb')
 
 function signUp(req,res){
 	let user = new User({
+		fbId : null,
 		name : req.body.name,
 		username : req.body.username,
 		password : req.body.password,
@@ -24,6 +26,7 @@ function signUp(req,res){
 }
 
 function signIn(req,res){
+	// console.log("masuk ",req.body)	
 	User.findOne({
 		username : req.body.username
 	},(err,user) => {  
@@ -44,6 +47,62 @@ function signIn(req,res){
 			}			
 		})
 	})
+}
+
+function signInFacebook(req,res){
+	FB.setAccessToken(req.body.accessToken);
+	FB.api('/me', { fields: ['id', 'name', 'picture', 'email'] }, function (response) {
+		if(!res || res.error) {
+			console.log(!response ? 'error occurred' : response.error);
+			return;
+		}
+		if(response){
+			User.findOne({
+				fbId : response.id
+			}).then(user => {
+				if(user){
+					jwt.sign({
+						id : user.id,
+						username : user.name,
+					}, process.env.SECRET_KEY , (err,token) => {
+						res.send({ response, message : "login success", token : token})
+					})	
+				}else{
+					console.log(response)
+					let user = new User({
+						fbId : response.id,
+						name : response.name,
+						username : response.name,
+						password : response.id,
+						email : response.email,
+						task  : [],	
+						createdAt : Date.now()
+					})	
+					user.save((err, user) => {
+						if(err){
+							console.log(err)
+							res.status(500).send(err)	
+						}else{
+							jwt.sign({
+								id : user.id,
+								username : user.name,
+							}, process.env.SECRET_KEY , (err,token) => {
+								res.send({ response, message : "login success", token : token})
+							})	
+						}
+
+					})						
+				}				
+			}).catch((err) => {
+				res.status(500).send(err)
+			})
+		}
+		// console.log(res.id);
+		// console.log(res.name);
+		// console.log(res.picture)
+	});
+
+
 }
 
 function findAll(req,res) {
@@ -86,5 +145,6 @@ module.exports = {
 	signUp,
 	signIn,
 	create,
-	findAll
+	findAll,
+	signInFacebook
 }

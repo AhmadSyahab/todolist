@@ -5,6 +5,7 @@ const Middleware = require('../middleware/checklogin')
 
 router.post('/signup', ControllerUser.signUp ); // SignUp
 router.post('/signIn', ControllerUser.signIn ); // SignIn
+router.post('/signIn/facebook', ControllerUser.signInFacebook );
 
 router.get('/task', Middleware.isSignIn, ControllerUser.findAll); // get all user profile and task list
 router.post('/task', Middleware.isSignIn, ControllerUser.create); // create task

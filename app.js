@@ -4,7 +4,11 @@ const mongoose = require('mongoose');
 const MongoClient = require('mongodb').MongoClient
 const morgan = require('morgan')
 const jwt = require('jsonwebtoken');
+const FB = require('fb')
+const cors = require('cors')
+const axios = require('axios')
  
+app.use(cors())
 
 const url = 'mongodb://localhost:27017/library';
 // const User = require('./routers/user')

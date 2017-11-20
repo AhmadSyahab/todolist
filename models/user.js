@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const saltFactor = 10;
 
 const userSchema = new Schema({
+	fbId : String,
 	name : String,
 	username : {
 		type : String,
